@@ -1,0 +1,4 @@
+venv
+*.pyc
+config_local.py
+data/*.txt

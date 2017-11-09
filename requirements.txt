@@ -1,0 +1,5 @@
+aiohttp
+aiodns
+aiofiles
+cchardet
+async_timeout
