@@ -4,12 +4,12 @@ import random
 import time
 import math
 import string
-
+import asyncio
 from collections import deque, Counter
 from itertools import product
 import logging
+from concurrent.futures._base import TimeoutError
 
-import asyncio
 import aiohttp
 import aiofiles
 import async_timeout
@@ -38,10 +38,10 @@ CODE_PREFIX = ''
 CODE_CHARS = string.digits
 CODE_LEN = 16
 
-CODES_PER_TASK_MAX = 30
-CODES_PER_SESSION_LIMIT = 10000
+CODES_PER_TASK_MAX = 10
+CODES_PER_SESSION_LIMIT = 50000
 CODES_BUFFER_LIMIT = 1000
-MAX_CLIENTS = 5000
+MAX_CLIENTS = 100
 
 DEBUG = False
 
@@ -155,8 +155,10 @@ async def task(pid, storage: Storage, sem: asyncio.Semaphore):
                         async with async_timeout.timeout(TIMEOUT):
                             await parsing(session, code, pid, storage)
                     except BaseException as e:
-                        logging.warning('Exception %s %s' % (type(e), e))
+                        logging.warning('Exception %s %s' % (type(e), str(e)))
                         storage.stats['fail'] += 1
+                        if isinstance(e, TimeoutError):
+                            await asyncio.sleep(TIMEOUT)
 
 
 async def run():
