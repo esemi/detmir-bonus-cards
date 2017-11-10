@@ -38,10 +38,10 @@ CODE_PREFIX = ''
 CODE_CHARS = string.digits
 CODE_LEN = 16
 
-CODES_PER_TASK_MAX = 10
-CODES_PER_SESSION_LIMIT = 50000
+CODES_PER_TASK_MAX = 20
+CODES_PER_SESSION_LIMIT = 500000
 CODES_BUFFER_LIMIT = 1000
-MAX_CLIENTS = 100
+MAX_CLIENTS = 30
 
 DEBUG = False
 
@@ -128,6 +128,8 @@ class Storage(object):
                 await self.parsed_asyncfile.write(''.join(['%s\n' % code for code in self.codes_buffer_parsed]))
                 self.stats['parsed'] += len(self.codes_buffer_parsed)
                 self.codes_buffer_parsed = []
+
+            logging.info('codes left %d', len(self.codes_queue))
 
 
 async def parsing(session, code, pid, storage):
