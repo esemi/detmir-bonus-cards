@@ -1,12 +1,10 @@
-# Bonus cards brutforce
+Bonus cards brutforce
+---
+Перебор и парсинг бонусных карт магазина Детский Мир.
 
-- - -
 
-## Service installation
-
-- - -
-
-```sh
+## Usage
+```
 $ pip install --upgrade virtualenv
 $ virtualenv -p python3.6 venv
 $ source venv/bin/activate
